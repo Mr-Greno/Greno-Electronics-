@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Greno Electronics</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    header {
+      background-color: #2196F3;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    nav a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    main {
+      padding: 1rem;
+    }
+    section {
+      background: white;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    label {
+      display: flex;
+      flex-direction: column;
+      font-weight: bold;
+    }
+    input, select, button {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      padding: 0.5rem;
+      text-align: center;
+      border: 1px solid #ccc;
+    }
+    h3 {
+      text-align: right;
+      margin-top: 1rem;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+    }
+    @media (max-width: 600px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+        width: 100%;
+      }
+      thead {
+        display: none;
+      }
+      tr {
+        margin-bottom: 1rem;
+        border-bottom: 2px solid #ccc;
+      }
+      td {
+        text-align: left;
+        padding-left: 50%;
+        position: relative;
+      }
+      td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 45%;
+        padding-left: 10px;
+        font-weight: bold;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Greno Electronics</h1>
+    <nav>
+      <a href="#catalog">Product Catalog</a>
+      <a href="#billing">Generate Bill</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="catalog">
+      <h2>Product Catalog</h2>
+      <ul>
+        <li>100W Bulb - ₹20</li>
+        <li>Electric Tape - ₹10</li>
+        <li>10W LED Bulb - ₹100</li>
+        <li>Copper Wire (5mm) - ₹20 per meter</li>
+      </ul>
+    </section>
+
+    <section id="billing">
+      <h2>Generate Bill</h2>
+      <form id="bill-form">
+        <label>Product:
+          <select id="product">
+            <option value="100W Bulb">100W Bulb - ₹20</option>
+            <option value="Electric Tape">Electric Tape - ₹10</option>
+            <option value="10W LED Bulb">10W LED Bulb - ₹100</option>
+            <option value="Copper Wire (5mm)">Copper Wire (5mm) - ₹20/m</option>
+          </select>
+        </label>
+        <label>Quantity:
+          <input type="number" id="quantity" value="1" min="1">
+        </label>
+        <button type="button" onclick="addItem()">Add to Bill</button>
+      </form>
+
+      <table id="bill-table">
+        <thead>
+          <tr><th>Item</th><th>Qty</th><th>Price</th><th>Total</th></tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <h3>Total Amount: ₹<span id="total">0</span></h3>
+      <button onclick="window.print()">Print Bill</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Greno Electronics</p>
+  </footer>
+
+  <script>
+    const prices = {
+      "100W Bulb": 20,
+      "Electric Tape": 10,
+      "10W LED Bulb": 100,
+      "Copper Wire (5mm)": 20
+    };
+
+    function addItem() {
+      const product = document.getElementById("product").value;
+      const quantity = parseInt(document.getElementById("quantity").value);
+      const price = prices[product];
+      const total = price * quantity;
+
+      const tbody = document.querySelector("#bill-table tbody");
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td data-label="Item">${product}</td>
+        <td data-label="Qty">${quantity}</td>
+        <td data-label="Price">₹${price}</td>
+        <td data-label="Total">₹${total}</td>
+      `;
+
+      tbody.appendChild(row);
+
+      const currentTotal = parseInt(document.getElementById("total").innerText);
+      document.getElementById("total").innerText = currentTotal + total;
+    }
+  </script>
+</body>
+</html>
